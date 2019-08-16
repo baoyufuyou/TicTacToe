@@ -1,0 +1,29 @@
+import pyttsx
+import time
+
+engine = pyttsx.init()
+engine.setProperty('rate', 100)
+engine.setProperty('volume', 1)
+
+voices = engine.getProperty('voices')
+
+#for voice in voices:
+#	print("Voice:")
+#	print(" - ID: %s" % voice.id)
+#	print(" - Name: %s" % voice.name)
+#	print(" - Languages: %s" % voice.languages)
+#	print(" - Gender: %s" % voice.gender)
+#	print(" - Age: %s" % voice.age)
+#	engine.say("hello!")
+#	engine.runAndWait()
+
+def text_to_speech(words):
+	engine.say(str(words))
+	engine.runAndWait()
+
+text_to_speech(want to play again?)
+
+
+#engine.runAndWait()
+#engine.say("Let's play tic tac toe!")
+#engine.runAndWait()

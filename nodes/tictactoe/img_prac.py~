@@ -1,0 +1,119 @@
+import cv2
+import rospy
+import argparse
+import imutils
+import time
+import sys
+import numpy as np
+from collections import deque
+from imutils.video import VideoStream
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge, CvBridgeError
+# Echo client program
+import socket
+import math
+
+
+
+def find_center(image):
+#image = cv2.imread(" frame " ) # --not sure if needed for camera
+	rows, cols, channels = image.shape #width and height
+
+	lower_green = np.array([40, 50, 10])
+	upper_green = np.array([120, 150, 80]) #edit color values as necessary for camera, make large range in case lighting changes
+	green = cv2.inRange(image, lower_green, upper_green)
+	row_list = []
+	col_list = []
+	total_row = 0
+	total_col = 0
+
+
+	for i in range(0,rows): #collect pixels to find average, add to list
+		for j in range(0,cols):
+			k = green[i,j]
+			if k == 255:
+				row_list.append(i)
+				col_list.append(j)
+
+#calculates center row
+	for x in row_list:
+		total_row += x
+	avg_row = total_row/(len(row_list))
+
+
+#calculates center col
+	for y in col_list:
+		total_col += y
+	avg_col = total_col/(len(col_list))
+	return [avg_row, avg_col]
+
+def get_upper_and_lower(expansion_size, row_addition, col_addition, avg_row, avg_col, img): #gets coordinates for each square for top and bottom corners
+	middle_row = avg_row + row_addition #can be negative
+	middle_col = avg_col + col_addition
+	for x in range(0, expansion_size):
+		for y in range(0, expansion_size+5):
+			img[middle_row+x, middle_col+y] = [0,0,255]
+			img[middle_row-x, middle_col+y] = [0,0,255]
+			img[middle_row-x, middle_col-y] = [0,0,255]
+			img[middle_row+x, middle_col-y] = [0,0,255]
+
+def find_range_for_all_squares(image):
+	avg_row = find_center(image)[0]
+	avg_col = find_center(image)[1]
+#	square1 = get_upper_and_lower(10, -80, -95, avg_row, avg_col, image)
+#	square2 = get_upper_and_lower(10, -80, 0, avg_row, avg_col, image)
+#	square3 = get_upper_and_lower(10, -80, 95, avg_row, avg_col, image)
+#	square4 = get_upper_and_lower(10, 0, -100, avg_row, avg_col, image)
+	square5 = get_upper_and_lower(10, 0, 0, avg_row, avg_col, image)
+#	square6 = get_upper_and_lower(10, 0, 95, avg_row, avg_col, image)
+#	square7 = get_upper_and_lower(15, 80, -95, avg_row, avg_col, image)
+#	square8 = get_upper_and_lower(15, 80, 0, avg_row, avg_col, image)
+#	square9 = get_upper_and_lower(15, 80, 95, avg_row, avg_col, image)
+
+
+
+
+class Stream(object):
+	def __init__(self):
+		self.sub = rospy.Subscriber("/kinect2/hd/image_color", Image, self.sub_callback)
+		self.bridge = CvBridge()
+		self.image = None
+		self.black = None
+		self.image_hsv = None   
+		self.pixel = (20,60,80) # arbitrary default
+
+	def sub_callback(self, data):
+		self.image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+		
+	def example_function(self): 
+		getImage = 0
+		fourcc = cv2.cv.CV_FOURCC(*'XVID')
+		video_writer = cv2.VideoWriter("/home/sar/catkin_ws/src/skill_assessment/kinect_perception/video.avi", fourcc, 20, (700, 500))
+		while (not rospy.is_shutdown()) and getImage == 0:
+#			print("These numbers are taken on the board", on_board) 
+			while self.image is None:
+				rospy.logwarn("Image not being received...")
+				rospy.sleep(1)
+			cv2.namedWindow('bgr', cv2.WINDOW_NORMAL)
+			cv2.resizeWindow("bgr", 800, 500)
+			cropped = self.image[100:800, 1000:1500]
+			find_range_for_all_squares(cropped)
+			#Show RGB images
+			cv2.imshow("bgr", cropped)
+#			play_game(blue_count_list,cropped, on_board, frame_count, pickup_place_counter)
+			key = cv2.waitKey(5) & 0xFF
+			getImage = 0  #
+
+			# if the 'q' key is pressed, stop the loop
+			if key == ord("q"):
+				break
+
+		cv2.destroyAllWindows()
+
+
+
+if __name__ == "__main__":
+	rospy.init_node("get_image")
+	r = Stream()
+	r.example_function()	   
+	  

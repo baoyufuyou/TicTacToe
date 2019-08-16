@@ -1,0 +1,37 @@
+Setting up UR Arm:
+Turn on robot
+Activate gripper using Local Control
+Put robot in Remote Control
+
+
+
+Setting up table:
+Make sure red pieces are in its squares
+If squares change, must change joint degrees on file
+Blue pieces have to be away from the board
+Robot should also be away from the board
+If size of board changes, detection function for each square in tic_tac_toe_perc.py has to be changed to match size
+If board is moved, image crop location has to be changed
+
+
+
+Starting file:
+Go to home/catkin_ws/src/skill_assessment/kinect_perception/launch
+Run: roslaunch tic_tac_toe_perc.launch
+Python file can be accessible from home/catkin_ws/src/skill_assessment/kinect_perception/nodes
+
+
+
+Playing game:
+PLayer has to go first
+Player uses blue pieces
+Robot uses red pieces
+
+Additional notes:
+Robot takes a bit long to read the frames
+If player puts piece down and robot does not respond, wait for response unless error message appears
+robot
+Robot cannot detect if someone has won if user has put the most recent piece down, it will keep going, need to interrupt program
+If robot has put down piece most recently, and game is over, robot can detect
+Robot cannot reach middle right square or bottom row because of safety planes
+Make sure user doesn't hold blue piece right above the board

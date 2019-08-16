@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<!-- One color filter launch file -->
+<launch>
+
+    <!-- First launch the kinect2 bridge -->
+    <include file="$(find kinect2_bridge)/launch/kinect2_bridge.launch">
+        <arg name="depth_method" value="opengl"/>
+    </include>
+
+    <!-- Launch color filtering node -->
+    <node name="get_image" pkg="tic_tac_toe" type="tic_tac_toe_perc.py"/>
+
+</launch>

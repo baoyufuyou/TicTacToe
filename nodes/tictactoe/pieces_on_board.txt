@@ -1,0 +1,9 @@
+This is dup board: [0, 0, 1, 0, 0, 0, 0, 0, 0] and prev board: [0, 0, 0, 0, 0, 0, 0, 0, 0] 
+This is the state of the board: [0, 0, 0, 0, 0, 0, 0, 0, 0]
+This is dup board: [0, 0, 1, 0, 0, 0, 0, 0, 0] and prev board: [0, 0, 0, 0, 0, 0, 0, 0, 0] 
+This is the state of the board: [0, 0, 0, 0, 0, 0, 0, 0, 0]
+This is dup board: [0, 0, 1, 0, 0, 0, 0, 0, 0] and prev board: [0, 0, 0, 0, 0, 0, 0, 0, 0] 
+This is the frame_count_check: 3 and frame count: 3 
+This is the new board after something was added: [0, 0, 1, 0, 0, 0, 0, 0, 0]
+This is the final board: [0, 0, 1, 0, 0, 0, 0, 0, 0]
+This is the state of the board: [0, 0, 1, 0, 0, 0, 0, 0, 0]
